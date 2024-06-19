@@ -18,7 +18,12 @@ const gameBoard = (function () {
     }
 
     const placeTile = (row, col) => {
-        gameArray[row][col] = "X";
+        if (gameArray[row][col] != "-") {
+            gameArray[row][col] = "X";
+            return true;
+        } else {
+            return false;
+        }
     }
 
     const printState = () => {
@@ -30,20 +35,70 @@ const gameBoard = (function () {
         }
     }
 
+    const hasGameFinished = () => {
+        for(let i=0; i<numOfRows; i++) {
+            let gameFinished = true;
+            for (let j=0; j<numOfColumns; j++) {
+                if (gameArray[i][j] == "-") {
+                    gameFinished = false;
+                }
+            }
+            if (gameFinished) {
+                return true;
+            }
+        }
+
+        for(let i=0; i<numOfColumns; i++) {
+            let gameFinished = true;
+            for (let j=0; j<numOfRows; j++) {
+                if (gameArray[j][i] == "-") {
+                    gameFinished = false;
+                }
+            }
+            if (gameFinished) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     const testMethod = () => {
         console.log(gameArray);
     }
 
-    return {resetBoard, placeTile, printState};
+    return {resetBoard, placeTile, printState, hasGameFinished};
 
 })();
 
 const Player = function (name) {
     let score = 0;
-    return {name, score};
+
+    const getScore = () => {
+        return score;
+    }
+
+    const incrementScore = () => {
+        score++;
+    }
+    return {name, getScore, incrementScore};
 }
+
+const GameController = (function () {
+
+    const player1 = Player("Player");
+    const player2 = Player("Robot");
+
+    const gameStart = () => {
+        
+    }
+
+})();
 
 let newPlayer = Player("Sam");
 console.log(newPlayer);
-gameBoard.placeTile(1,2);
+gameBoard.placeTile(0,1);
+gameBoard.placeTile(1,1);
+gameBoard.placeTile(2,1);
 gameBoard.printState();
+console.log(gameBoard.hasGameFinished());
