@@ -2,6 +2,8 @@ const gameBoard = (function () {
     const numOfRows = 3;
     const numOfColumns = 3;
 
+    let movesMade = 0;
+
     const initialiseBoard = () => {
         return Array.from({length: numOfRows},
             () => Array(numOfColumns).fill("-"));
@@ -20,6 +22,7 @@ const gameBoard = (function () {
     const placeTile = (row, col, tileChar) => {
         if (gameArray[row][col] == "-") {
             gameArray[row][col] = tileChar;
+            movesMade++;
             return true;
         } else {
             return false;
@@ -95,11 +98,15 @@ const gameBoard = (function () {
         return false;
     }
 
+    const hasGameDrawn = () => {
+        return movesMade == numOfColumns * numOfRows;
+    }
+
     const testMethod = () => {
         console.log(gameArray);
     }
 
-    return {resetBoard, placeTile, printState, hasGameFinished};
+    return {resetBoard, placeTile, printState, hasGameFinished, hasGameDrawn};
 
 })();
 
@@ -156,6 +163,10 @@ const GameController = (function () {
 
             if (gameBoard.hasGameFinished()) {
                 gameWinMessage.textContent = "Congrats " + player.name + " You Have Won!";
+                gameWinMessage.classList.remove("invisible");
+                console.log(currentPlayer.name + " has won!");
+            } else if (gameBoard.hasGameDrawn()) {
+                gameWinMessage.textContent = "Game Has Drawn...";
                 gameWinMessage.classList.remove("invisible");
                 console.log(currentPlayer.name + " has won!");
             } else {
