@@ -82,7 +82,7 @@ img {
     background-color: #082f49;
 
     border-radius: 1em;
-    box-shadow: 1em 1em 8em 1em #01070aa9;
+    box-shadow: 0em 0em 5em 2em #01070a3d;
 
     padding: 1em;
 }
@@ -105,9 +105,9 @@ img {
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
+    right: 0; 
     bottom: 0;
-    transition: all 2s ease-in-out;
+    transition: all 1s ease-in-out;
     z-index: -1;
 
     display: flex;
@@ -120,6 +120,22 @@ img {
 
 
     text-align: center;
+}
+
+.dialogBtn {
+    font-size: 1.25em;
+}
+
+#cpuBtn {
+    background-color: #008D9A;
+}
+
+#humanBtn {
+    background-color: #F48FF9;
+}
+
+#beginBtn {
+    background-color: orange;
 }
 
 .open {

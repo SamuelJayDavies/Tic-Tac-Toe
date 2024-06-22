@@ -190,6 +190,27 @@ const GameController = (function () {
 
 const GameViewController = (function () {
     const dialogBox = document.getElementById("dialog-box");
+    const gameModeBtns = document.getElementById("gamemode-buttons");
+    const cpuBtn = document.getElementById("cpuBtn");
+    const humanBtn = document.getElementById("humanBtn");
+    const beginBtn = document.getElementById("beginBtn");
 
+    cpuBtn.addEventListener("click", () => {
+        gameModeBtns.removeChild(humanBtn);
+        beginBtn.style.backgroundColor = "#008D9A";
+    })
+
+    humanBtn.addEventListener("click", () => {
+        gameModeBtns.removeChild(cpuBtn);
+        beginBtn.style.backgroundColor = "#F48FF9";
+    })
+
+    beginBtn.addEventListener("click", () => {
+        dialogBox.classList.remove("open");
+    })
+
+    document.addEventListener("DOMContentLoaded", () => {
+        dialogBox.classList.add("open");
+    })
 
 })();

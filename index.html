@@ -11,11 +11,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div id="dialog-box" class="dialog-box open">
+    <div id="dialog-box" class="dialog-box">
         <div class="content-area">
             <h1>Welcome, to tic tac toe</h1>
+            <p>Do you wish to play against a computer or with a friend nearby?</p>
+            <div id="gamemode-buttons">
+                <button id="cpuBtn" class="dialogBtn">CPU</button>
+                <button id="humanBtn" class="dialogBtn">Human</button>
+            </div>
             <div class="name-form">Please enter your name: <input type="text"></div>
-            <button>Begin</button>
+            <div class="name-form invisible">Please enter your friend's name: <input type="text"></div>
+            <button id="beginBtn" class="dialogBtn">Begin</button>
         </div>
     </div>
     <div class="main-container">
