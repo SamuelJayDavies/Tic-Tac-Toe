@@ -134,8 +134,8 @@ const Player = function (name, tileGraphic, tileChar) {
 
 const GameController = (function () {
 
-    const player1Graphic = "icons/x-icon.png";
-    const player2Graphic = "icons/o-icon.png";
+    const player1Graphic = "icons/x-alt-icon.png";
+    const player2Graphic = "icons/o-alt-icon.png";
 
     const player1 = Player("Player", player1Graphic, "x");
     const player2 = Player("Robot", player2Graphic, "o");
@@ -185,5 +185,11 @@ const GameController = (function () {
     const gameStart = () => {
         
     }
+
+})();
+
+const GameViewController = (function () {
+    const dialogBox = document.getElementById("dialog-box");
+
 
 })();
