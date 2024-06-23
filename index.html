@@ -28,33 +28,49 @@
         <div class="header">
             <h1>Tic Tac Toe</h1>
         </div>
-        <div class="game-container">
-            <div class="game-tile" data-tileRow="0" data-tileColumn="0">
-                <img src="icons/dash.png" class="game-tile-img">
+        <div class="game-area">
+            <div class="game-container">
+                <div class="game-tile" data-tileRow="0" data-tileColumn="0">
+                    <img src="icons/dash.png" class="game-tile-img">
+                </div>
+                <div class="game-tile" data-tileRow="0" data-tileColumn="1">
+                    <img src="icons/dash.png" class="game-tile-img">
+                </div>
+                <div class="game-tile" data-tileRow="0" data-tileColumn="2">
+                    <img src="icons/dash.png" class="game-tile-img">
+                </div>
+                <div class="game-tile" data-tileRow="1" data-tileColumn="0">
+                    <img src="icons/dash.png" class="game-tile-img">
+                </div>
+                <div class="game-tile" data-tileRow="1" data-tileColumn="1">
+                    <img src="icons/dash.png" class="game-tile-img">
+                </div>
+                <div class="game-tile" data-tileRow="1" data-tileColumn="2">
+                    <img src="icons/dash.png" class="game-tile-img">
+                </div>
+                <div class="game-tile" data-tileRow="2" data-tileColumn="0">
+                    <img src="icons/dash.png" class="game-tile-img">
+                </div>
+                <div class="game-tile" data-tileRow="2" data-tileColumn="1">
+                    <img src="icons/dash.png" class="game-tile-img">
+                </div>
+                <div class="game-tile" data-tileRow="2" data-tileColumn="2">
+                    <img src="icons/dash.png" class="game-tile-img">
+                </div>
             </div>
-            <div class="game-tile" data-tileRow="0" data-tileColumn="1">
-                <img src="icons/dash.png" class="game-tile-img">
+            <div class="text-container">
+                <textarea id="textarea"></textarea>
+                <button id="resetBtn">Reset</button>
             </div>
-            <div class="game-tile" data-tileRow="0" data-tileColumn="2">
-                <img src="icons/dash.png" class="game-tile-img">
+        </div>
+        <div class="score-container">
+            <div class="player-score">
+                <h1>Player 1</h1>
+                <h1 id="player1-score">0</h1>
             </div>
-            <div class="game-tile" data-tileRow="1" data-tileColumn="0">
-                <img src="icons/dash.png" class="game-tile-img">
-            </div>
-            <div class="game-tile" data-tileRow="1" data-tileColumn="1">
-                <img src="icons/dash.png" class="game-tile-img">
-            </div>
-            <div class="game-tile" data-tileRow="1" data-tileColumn="2">
-                <img src="icons/dash.png" class="game-tile-img">
-            </div>
-            <div class="game-tile" data-tileRow="2" data-tileColumn="0">
-                <img src="icons/dash.png" class="game-tile-img">
-            </div>
-            <div class="game-tile" data-tileRow="2" data-tileColumn="1">
-                <img src="icons/dash.png" class="game-tile-img">
-            </div>
-            <div class="game-tile" data-tileRow="2" data-tileColumn="2">
-                <img src="icons/dash.png" class="game-tile-img">
+            <div class="player-score">
+                <h1>Player 2</h1>
+                <h1 id="player2-score">0</h1>
             </div>
         </div>
         <div class="game-status">
