@@ -12,11 +12,7 @@ const gameBoard = (function () {
     let gameArray = initialiseBoard();
 
     const resetBoard = () => {
-        for(let i=0; i<numOfRows; i++) {
-            for(let j=0; j<numOfColumns; j++) {
-                gameArray[i][j] = "-";
-            }
-        }
+        gameArray = initialiseBoard();
     }
 
     const placeTile = (row, col, tileChar) => {
@@ -165,10 +161,11 @@ const GameController = (function () {
                 gameWinMessage.textContent = "Congrats " + player.name + " You Have Won!";
                 gameWinMessage.classList.remove("invisible");
                 console.log(currentPlayer.name + " has won!");
+                GameViewController.updateScore(player);
             } else if (gameBoard.hasGameDrawn()) {
                 gameWinMessage.textContent = "Game Has Drawn...";
                 gameWinMessage.classList.remove("invisible");
-                console.log(currentPlayer.name + " has won!");
+                console.log("Nobody has won!");
             } else {
                 switchPlayer();
             }
@@ -176,6 +173,14 @@ const GameController = (function () {
             /** Logic here for when a move is invalid */
             console.log("Invalid Move");
         }
+    }
+
+    const resetBoard = () => {
+        for (let gameTile of gameTiles) {
+            const img = gameTile.getElementsByClassName("game-tile-img");
+            img[0].src = "icons/dash.png";
+        }
+        gameWinMessage.classList.add("invisible");
     }
 
     const switchPlayer = () => {
@@ -186,6 +191,8 @@ const GameController = (function () {
         
     }
 
+    return {resetBoard};
+
 })();
 
 const GameViewController = (function () {
@@ -194,6 +201,29 @@ const GameViewController = (function () {
     const cpuBtn = document.getElementById("cpuBtn");
     const humanBtn = document.getElementById("humanBtn");
     const beginBtn = document.getElementById("beginBtn");
+
+    const player1Score = document.getElementById("player1-score");
+    const player2Score = document.getElementById("player2-score");
+
+    const textContainer = document.getElementById("text-container");
+
+    const updateScore = (player) => {
+        if (player.getTileChar() == "x") {
+            player1Score.textContent = Number(player1Score.textContent) + 1;
+        } else {
+            player2Score.textContent = Number(player2Score.textContent) + 1;
+        }
+        let newGameBtn = document.createElement("button");
+        newGameBtn.classList.add("menuBtn");
+        newGameBtn.textContent = "Play Again?";
+        newGameBtn.addEventListener("click", () => {
+            gameBoard.resetBoard();
+            GameController.resetBoard();
+            textContainer.removeChild(newGameBtn);
+
+        })
+        textContainer.appendChild(newGameBtn);
+    }
 
     cpuBtn.addEventListener("click", () => {
         gameModeBtns.removeChild(humanBtn);
@@ -212,5 +242,7 @@ const GameViewController = (function () {
     document.addEventListener("DOMContentLoaded", () => {
         dialogBox.classList.add("open");
     })
+
+    return {updateScore};
 
 })();

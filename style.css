@@ -207,7 +207,7 @@ img {
 .text-container {
     display: flex;
     flex-direction: column;
-    gap: 10%;
+    gap: 5%;
 }
 
 #textarea {
@@ -217,7 +217,7 @@ img {
     border-radius: 1em;
 }
 
-#resetBtn {
+.menuBtn {
     font-size: 1.5em;
 
     color: black;
@@ -228,7 +228,7 @@ img {
     transition: 0.25s ease-in-out;
 }
 
-#resetBtn:hover {
+.menuBtn:hover {
     background-color: orange;
     transform: scale(1.1);
     transition: 0.25s ease-in-out;
@@ -260,20 +260,17 @@ img {
     font-size: 3em;
 }
 
-#player1-score {
-    padding-right: 0.1em;
-    padding-left: 0.1em;
+.player-score-num {
+    padding-right: 0.15em;
+    padding-left: 0.15em;
     padding-bottom: 0.15em;
-    background-color: #008D9A;
-
     box-shadow: 0.1em 0.1em rgb(0, 0, 0);
 }
 
-#player2-score {
-    padding-right: 0.1em;
-    padding-left: 0.1em;
-    padding-bottom: 0.15em;
-    background-color: orange;
+#player1-score {
+    background-color: #008D9A;
+}
 
-    box-shadow: 0.1em 0.1em rgb(0, 0, 0);
+#player2-score {
+    background-color: orange;
 }
