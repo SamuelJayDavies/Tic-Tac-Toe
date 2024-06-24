@@ -13,6 +13,7 @@ const gameBoard = (function () {
 
     const resetBoard = () => {
         gameArray = initialiseBoard();
+        movesMade = 0;
     }
 
     const placeTile = (row, col, tileChar) => {
@@ -181,6 +182,7 @@ const GameController = (function () {
             img[0].src = "icons/dash.png";
         }
         gameWinMessage.classList.add("invisible");
+        currentPlayer = player1;
     }
 
     const switchPlayer = () => {
