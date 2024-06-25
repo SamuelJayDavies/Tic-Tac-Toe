@@ -2,6 +2,7 @@ const gameBoard = (function () {
     const numOfRows = 3;
     const numOfColumns = 3;
 
+    let hasGameFinishedBool = false;
     let movesMade = 0;
 
     const initialiseBoard = () => {
@@ -14,15 +15,18 @@ const gameBoard = (function () {
     const resetBoard = () => {
         gameArray = initialiseBoard();
         movesMade = 0;
+        hasGameFinishedBool = false;
     }
 
     const placeTile = (row, col, tileChar) => {
-        if (gameArray[row][col] == "-") {
-            gameArray[row][col] = tileChar;
-            movesMade++;
-            return true;
-        } else {
-            return false;
+        if (!hasGameFinishedBool) {
+            if (gameArray[row][col] == "-") {
+                gameArray[row][col] = tileChar;
+                movesMade++;
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 
@@ -36,59 +40,59 @@ const gameBoard = (function () {
     }
 
     const hasGameFinished = () => {
-        let gameFinished = true;
+        hasGameFinishedBool = true;
         let currentTileChar;
         for(let i=0; i<numOfRows; i++) {
-            gameFinished = true;
+            hasGameFinishedBool = true;
             currentTileChar = gameArray[i][0];
             console.log(currentTileChar);
             for (let j=0; j<numOfColumns; j++) {
                 if (gameArray[i][j] == "-" || gameArray[i][j] != currentTileChar) {
-                    gameFinished = false;
+                    hasGameFinishedBool = false;
                 } 
             }
-            if (gameFinished) {
+            if (hasGameFinishedBool) {
                 return true;
             }
         }
 
         for(let i=0; i<numOfColumns; i++) {
-            gameFinished = true;
+            hasGameFinishedBool = true;
             currentTileChar = gameArray[0][i];
             for (let j=0; j<numOfRows; j++) {
                 if (gameArray[j][i] == "-" || gameArray[j][i] != currentTileChar) {
-                    gameFinished = false;
+                    hasGameFinishedBool = false;
                 }
             }
-            if (gameFinished) {
+            if (hasGameFinishedBool) {
                 return true;
             }
         }   
 
-        gameFinished = true;
+        hasGameFinishedBool = true;
         currentTileChar = gameArray[0][0];
         for(let i=0; i<numOfRows; i++) {
             if (gameArray[i][i] == "-" || gameArray[i][i] != currentTileChar) {
-                gameFinished = false;
+                hasGameFinishedBool = false;
             }
         }
-        if (gameFinished) {
+        if (hasGameFinishedBool) {
             return true;
         }
 
-        gameFinished = true;
+        hasGameFinishedBool = true;
         let currentRow = numOfRows-1;
         let currentColumn = 0;
         currentTileChar = gameArray[currentRow][currentColumn];
         for(let i=0; i<numOfColumns; i++) {
             if (gameArray[currentRow][currentColumn] == "-" || 
                 gameArray[currentRow][currentColumn] != currentTileChar) {
-                gameFinished = false;
+                    hasGameFinishedBool = false;
             }
             currentRow--;
             currentColumn++;
         }
-        if (gameFinished) {
+        if (hasGameFinishedBool) {
             return true;
         } 
 
@@ -110,12 +114,12 @@ const gameBoard = (function () {
 const Player = function (name, tileGraphic, tileChar) {
     let score = 0;
 
-    const getScore = () => {
-        return score;
+    const setScore = (newScore) => {
+        score = newScore;
     }
 
-    const incrementScore = () => {
-        score++;
+    const getScore = () => {
+        return score;
     }
 
     const getTileGraphic = () => {
@@ -126,7 +130,7 @@ const Player = function (name, tileGraphic, tileChar) {
         return tileChar;
     }
 
-    return {name, getScore, incrementScore, getTileGraphic, getTileChar};
+    return {name, setScore, getScore, getTileGraphic, getTileChar};
 }
 
 const GameController = (function () {
@@ -162,7 +166,8 @@ const GameController = (function () {
                 gameWinMessage.textContent = "Congrats " + player.name + " You Have Won!";
                 gameWinMessage.classList.remove("invisible");
                 console.log(currentPlayer.name + " has won!");
-                GameViewController.updateScore(player);
+                player.setScore(player.getScore() + 1);
+                GameViewController.gameFinished(player1, player2);
             } else if (gameBoard.hasGameDrawn()) {
                 gameWinMessage.textContent = "Game Has Drawn...";
                 gameWinMessage.classList.remove("invisible");
@@ -185,6 +190,12 @@ const GameController = (function () {
         currentPlayer = player1;
     }
 
+    const resetPlayers = () => {
+        player1.setScore(0);
+        player2.setScore(0);
+        GameViewController.updateScore(player1, player2);
+    }
+
     const switchPlayer = () => {
         (currentPlayer == player1 ? currentPlayer = player2 : currentPlayer = player1);
     }
@@ -193,7 +204,7 @@ const GameController = (function () {
         
     }
 
-    return {resetBoard};
+    return {resetBoard, resetPlayers};
 
 })();
 
@@ -208,15 +219,13 @@ const GameViewController = (function () {
     const player2Score = document.getElementById("player2-score");
 
     const textContainer = document.getElementById("text-container");
+    const resetBtn = document.getElementById("resetBtn");
 
-    const updateScore = (player) => {
-        if (player.getTileChar() == "x") {
-            player1Score.textContent = Number(player1Score.textContent) + 1;
-        } else {
-            player2Score.textContent = Number(player2Score.textContent) + 1;
-        }
+    const gameFinished = (player1, player2) => {
+        updateScore(player1, player2);
         let newGameBtn = document.createElement("button");
         newGameBtn.classList.add("menuBtn");
+        newGameBtn.id = "newGameBtn";
         newGameBtn.textContent = "Play Again?";
         newGameBtn.addEventListener("click", () => {
             gameBoard.resetBoard();
@@ -225,6 +234,12 @@ const GameViewController = (function () {
 
         })
         textContainer.appendChild(newGameBtn);
+    }
+
+    const updateScore = (player1, player2) => {
+        console.log(player1.getScore());
+        player1Score.textContent = player1.getScore();
+        player2Score.textContent = player2.getScore();
     }
 
     cpuBtn.addEventListener("click", () => {
@@ -245,6 +260,24 @@ const GameViewController = (function () {
         dialogBox.classList.add("open");
     })
 
-    return {updateScore};
+    resetBtn.addEventListener("click", () => {
+        gameBoard.resetBoard();
+        GameController.resetBoard();
+        GameController.resetPlayers();
+
+        const newGameBtn = document.getElementById("newGameBtn");
+
+
+        if (newGameBtn != null) {
+            textContainer.removeChild(newGameBtn);
+        }
+    })
+
+    return {gameFinished, updateScore};
 
 })();
+
+const player1 = Player('Alice', 'X', 'A');
+console.log(player1.getScore()); // Should log 0
+player1.setScore(10);
+console.log(player1.getScore()); // Should log 10
