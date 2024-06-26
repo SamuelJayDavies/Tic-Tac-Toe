@@ -103,11 +103,11 @@ const gameBoard = (function () {
         return movesMade == numOfColumns * numOfRows;
     }
 
-    const testMethod = () => {
-        console.log(gameArray);
+    const findCpuMove = () => {
+        return 11;
     }
 
-    return {resetBoard, placeTile, printState, hasGameFinished, hasGameDrawn};
+    return {resetBoard, placeTile, printState, hasGameFinished, hasGameDrawn, findCpuMove};
 
 })();
 
@@ -145,17 +145,17 @@ const GameController = (function () {
     const gameTiles = document.getElementsByClassName("game-tile");
     const gameWinMessage = document.getElementById("congrats-message");
 
+    let gameMode = "";
+
     for (let gameTile of gameTiles) {
         gameTile.addEventListener("click", function() {
-            selectTile(gameTile, currentPlayer);
+            selectTile(gameTile.getAttribute('data-tilerow'), gameTile.getAttribute('data-tileColumn'), 
+            gameTile, currentPlayer);
         })
     }
 
-    const selectTile = (gameTile, player) => {
+    const selectTile = (tileRow, tileColumn, gameTile, player) => {
         /** Validation */
-        const tileRow = gameTile.getAttribute('data-tileRow');
-        const tileColumn = gameTile.getAttribute('data-tileColumn');
-
         console.log(tileRow + " " + tileColumn)
         
         if (gameBoard.placeTile(tileRow, tileColumn, player.getTileChar())) {
@@ -163,7 +163,7 @@ const GameController = (function () {
             img[0].src= player.getTileGraphic();
 
             if (gameBoard.hasGameFinished()) {
-                gameWinMessage.textContent = "Congrats " + player.name + " You Have Won!";
+                gameWinMessage.textContent = "Congrats " + player.name + ", You Have Won!";
                 gameWinMessage.classList.remove("invisible");
                 console.log(currentPlayer.name + " has won!");
                 player.setScore(player.getScore() + 1);
@@ -172,8 +172,15 @@ const GameController = (function () {
                 gameWinMessage.textContent = "Game Has Drawn...";
                 gameWinMessage.classList.remove("invisible");
                 console.log("Nobody has won!");
+                GameViewController.gameFinished(player1, player2);
             } else {
-                switchPlayer();
+                if (gameMode == "cpu" && currentPlayer == player1) {
+                    switchPlayer();
+                    const rowAndColumn = gameBoard.findCpuMove();
+                    // Incomplete
+                } else {
+                    switchPlayer();
+                }
             }
         } else {
             /** Logic here for when a move is invalid */
@@ -200,26 +207,42 @@ const GameController = (function () {
         (currentPlayer == player1 ? currentPlayer = player2 : currentPlayer = player1);
     }
 
-    const gameStart = () => {
-        
+    const setPlayersNames = (player1Name, player2Name) => {
+        player1.name = player1Name;
+        player2.name = player2Name;
     }
 
-    return {resetBoard, resetPlayers};
+    const setGameMode = (currentGameMode) => {
+        this.gameMode = currentGameMode;
+    }
+
+    return {selectTile, resetBoard, resetPlayers, setPlayersNames, setGameMode};
 
 })();
 
 const GameViewController = (function () {
     const dialogBox = document.getElementById("dialog-box");
     const gameModeBtns = document.getElementById("gamemode-buttons");
+
+    const firstPlayerNameTxt = document.getElementById("first-player-name");
+    const secondPlayerNameTxt = document.getElementById("second-player-name");
+    const secondName = document.getElementById("second-name");
+
     const cpuBtn = document.getElementById("cpuBtn");
     const humanBtn = document.getElementById("humanBtn");
     const beginBtn = document.getElementById("beginBtn");
 
+    const validationMsg = document.getElementById("validation-msg");
+
+    const player1Name = document.getElementById("player1-name");
+    const player2Name = document.getElementById("player2-name");
     const player1Score = document.getElementById("player1-score");
     const player2Score = document.getElementById("player2-score");
 
     const textContainer = document.getElementById("text-container");
     const resetBtn = document.getElementById("resetBtn");
+
+    let currentGameMode = "";
 
     const gameFinished = (player1, player2) => {
         updateScore(player1, player2);
@@ -245,15 +268,35 @@ const GameViewController = (function () {
     cpuBtn.addEventListener("click", () => {
         gameModeBtns.removeChild(humanBtn);
         beginBtn.style.backgroundColor = "#008D9A";
+        player2Score.style.backgroundColor = "orange";
+        currentGameMode = "cpu";
+        cpuBtn.disabled = true;
     })
 
     humanBtn.addEventListener("click", () => {
         gameModeBtns.removeChild(cpuBtn);
         beginBtn.style.backgroundColor = "#F48FF9";
+        player2Score.style.backgroundColor = "#F48FF9";
+        currentGameMode = "human";
+        secondName.classList.remove("invisible");
+        humanBtn.disabled = true;
     })
 
     beginBtn.addEventListener("click", () => {
-        dialogBox.classList.remove("open");
+        if ((firstPlayerNameTxt.value !== "" && secondPlayerNameTxt.value !== "") || 
+            (firstPlayerNameTxt.value !== "" && currentGameMode == "cpu")) {
+            dialogBox.classList.remove("open");
+            const player1NameVal = firstPlayerNameTxt.value;
+            let player2NameVal = "CPU";
+            if (currentGameMode == "human") {
+                player2NameVal = secondPlayerNameTxt.value;
+            }
+            player1Name.textContent = player1NameVal
+            player2Name.textContent = player2NameVal;
+            GameController.setPlayersNames(player1NameVal, player2NameVal);
+        } else {
+            validationMsg.classList.remove("invisible");
+        }
     })
 
     document.addEventListener("DOMContentLoaded", () => {
